@@ -1,6 +1,9 @@
 name: Agente de Analise de Mercado
 
 on:
+  schedule:
+    - cron: "*/5 * * * *"
+
   workflow_dispatch:
 
 jobs:
