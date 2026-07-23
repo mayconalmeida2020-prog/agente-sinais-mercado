@@ -224,3 +224,360 @@ function calcularResistencia(candles){
 
 
 }
+// =====================================
+// ANÁLISE DOS PADRÕES DE CANDLE
+// =====================================
+
+
+function analisarCandles(candles){
+
+
+  if(candles.length < 52){
+
+    return null;
+
+  }
+
+
+
+  const atual =
+  candles[candles.length - 1];
+
+
+  const anterior =
+  candles[candles.length - 2];
+
+
+  const antesAnterior =
+  candles[candles.length - 3];
+
+
+
+  const openAtual =
+  parseFloat(atual.open);
+
+
+  const closeAtual =
+  parseFloat(atual.close);
+
+
+  const openAnterior =
+  parseFloat(anterior.open);
+
+
+  const closeAnterior =
+  parseFloat(anterior.close);
+
+
+  const openAntes =
+  parseFloat(antesAnterior.open);
+
+
+  const closeAntes =
+  parseFloat(antesAnterior.close);
+
+
+
+  const rsi =
+  calcularRSI(candles);
+
+
+
+  const sma10 =
+  calcularSMA(10,candles);
+
+
+
+  const sma50 =
+  calcularSMA(50,candles);
+
+
+
+  const suporte =
+  calcularSuporte(candles);
+
+
+
+  const resistencia =
+  calcularResistencia(candles);
+
+
+
+  const tendenciaAlta =
+  sma10 > sma50;
+
+
+
+  const tendenciaBaixa =
+  sma10 < sma50;
+
+
+
+  const margem =
+  closeAtual * 0.002;
+
+
+
+  const pertoSuporte =
+  Math.abs(closeAtual - suporte)
+  <= margem;
+
+
+
+  const pertoResistencia =
+  Math.abs(closeAtual - resistencia)
+  <= margem;
+
+
+
+  let sinal = null;
+
+  let padrao = "";
+
+
+
+
+
+// =====================================
+// ENGOLFO DE ALTA
+// =====================================
+
+
+if(
+
+tendenciaAlta &&
+
+closeAnterior < openAnterior &&
+
+closeAtual > openAtual &&
+
+closeAtual > openAnterior &&
+
+openAtual <= closeAnterior
+
+){
+
+
+sinal="COMPRA";
+
+padrao="Engolfo de Alta";
+
+
+}
+
+
+
+
+// =====================================
+// ENGOLFO DE BAIXA
+// =====================================
+
+
+else if(
+
+tendenciaBaixa &&
+
+closeAnterior > openAnterior &&
+
+closeAtual < openAtual &&
+
+closeAtual < openAnterior &&
+
+openAtual >= closeAnterior
+
+){
+
+
+sinal="VENDA";
+
+padrao="Engolfo de Baixa";
+
+
+}
+
+
+
+
+
+// =====================================
+// MARTelo
+// =====================================
+
+
+const corpo =
+Math.abs(closeAtual-openAtual);
+
+
+
+const sombraInferior =
+Math.min(openAtual,closeAtual)
+-
+parseFloat(atual.low);
+
+
+
+const sombraSuperior =
+parseFloat(atual.high)
+-
+Math.max(openAtual,closeAtual);
+
+
+
+
+
+if(
+
+tendenciaAlta &&
+
+corpo < sombraInferior &&
+
+sombraSuperior < corpo * 0.3 &&
+
+pertoSuporte &&
+
+rsi < 40
+
+){
+
+
+sinal="COMPRA";
+
+padrao="Martelo no Suporte";
+
+
+}
+
+
+
+
+
+// =====================================
+// ENFORCADO
+// =====================================
+
+
+else if(
+
+tendenciaBaixa &&
+
+corpo < sombraSuperior &&
+
+sombraInferior < corpo * 0.3 &&
+
+pertoResistencia &&
+
+rsi > 60
+
+){
+
+
+sinal="VENDA";
+
+padrao="Enforcado na Resistência";
+
+
+}
+
+
+
+
+
+// =====================================
+// ESTRELA DA MANHÃ
+// =====================================
+
+
+if(
+
+tendenciaAlta &&
+
+closeAntes < openAntes &&
+
+Math.abs(openAnterior-closeAnterior)
+<
+corpo*0.3 &&
+
+closeAtual > openAtual &&
+
+closeAtual >
+((openAntes+closeAntes)/2)
+
+){
+
+
+sinal="COMPRA";
+
+padrao="Estrela da Manhã";
+
+
+}
+
+
+
+
+
+// =====================================
+// ESTRELA DA NOITE
+// =====================================
+
+
+if(
+
+tendenciaBaixa &&
+
+closeAntes > openAntes &&
+
+Math.abs(openAnterior-closeAnterior)
+<
+corpo*0.3 &&
+
+closeAtual < openAtual &&
+
+closeAtual <
+((openAntes+closeAntes)/2)
+
+){
+
+
+sinal="VENDA";
+
+padrao="Estrela da Noite";
+
+
+}
+
+
+
+
+
+if(sinal){
+
+
+return {
+
+par:PAR,
+
+sinal:sinal,
+
+preco:closeAtual,
+
+padrao:padrao,
+
+rsi:rsi.toFixed(2),
+
+sma10:sma10.toFixed(5),
+
+sma50:sma50.toFixed(5)
+
+};
+
+
+}
+
+
+
+return null;
+
+
+
+}
