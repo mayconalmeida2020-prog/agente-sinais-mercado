@@ -1,66 +1,36 @@
 name: Agente de Analise de Mercado
 
-
 on:
-
   workflow_dispatch:
 
-
-
 jobs:
-
-
   executar-agente:
-
 
     runs-on: ubuntu-latest
 
-
-
     steps:
 
-
-    # Baixar o código do repositório
-
-    - name: Baixar codigo
-
-      uses: actions/checkout@v4
+      # Baixar o código do repositório
+      - name: Baixar codigo
+        uses: actions/checkout@v4
 
 
-
-    # Instalar Node.js
-
-    - name: Configurar Node
-
-      uses: actions/setup-node@v4
-
-      with:
-
-        node-version: 20
+      # Configurar Node.js
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
 
-
-    # Instalar bibliotecas
-
-    - name: Instalar dependencias
-
-      run:
-
-        npm install
+      # Instalar dependências do projeto
+      - name: Instalar dependencias
+        run: npm install
 
 
+      # Executar o agente
+      - name: Executar analise
+        env:
+          TWELVEDATA_KEY: ${{ secrets.TWELVEDATA_KEY }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-    # Executar agente
-
-  - name: Executar analise
-
-  env:
-
-    TWELVEDATA_KEY: ${{ secrets.TWELVEDATA_KEY }}
-
-    GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-
-
-  run:
-
-    node index.js
+        run: node index.js
