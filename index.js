@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { gravarSinal } = require("./sheets");
 
 
 // =====================================
@@ -87,7 +88,9 @@ function calcularRSI(candles) {
 
 
 
-  for (let i = 1; i < candles.length; i++) {
+  const ultimos = candles.slice(-(periodo + 1));
+
+ for (let i = 1; i < ultimos.length; i++) {
 
 
     const atual =
@@ -626,7 +629,7 @@ async function iniciar(){
 
 
 
-  if(sinal){
+if(sinal){
 
 
 
@@ -687,8 +690,15 @@ async function iniciar(){
     );
 
 
+    // =====================================
+    // GRAVAR NA PLANILHA GOOGLE SHEETS
+    // =====================================
 
-  }else{
+    await gravarSinal(sinal);
+
+
+
+}else{
 
 
 
@@ -697,16 +707,8 @@ async function iniciar(){
     );
 
 
-
-  }
-
-
-
 }
-
-
-
-
+}
 // iniciar agente
 
 iniciar();
