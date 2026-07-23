@@ -1,0 +1,9 @@
+{
+  "name": "agente-sinais-mercado",
+  "version": "1.0.0",
+  "description": "Agente de análise de mercado com geração de sinais",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
