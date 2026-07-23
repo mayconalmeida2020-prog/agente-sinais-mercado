@@ -59,12 +59,15 @@ jobs:
 
     # Executar agente
 
-    - name: Executar analise
+  - name: Executar analise
 
-      env:
+  env:
 
-        TWELVEDATA_KEY: ${{ secrets.TWELVEDATA_KEY }}
+    TWELVEDATA_KEY: ${{ secrets.TWELVEDATA_KEY }}
 
-      run:
+    GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-        node index.js
+
+  run:
+
+    node index.js
