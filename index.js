@@ -581,3 +581,132 @@ return null;
 
 
 }
+// =====================================
+// EXECUÇÃO DO AGENTE
+// =====================================
+
+
+async function iniciar(){
+
+
+  console.log(
+    "🤖 AGENTE DE ANÁLISE INICIADO"
+  );
+
+
+  console.log(
+    "Par analisado:",
+    PAR
+  );
+
+
+  const candles =
+  await buscarCandles();
+
+
+
+  if(candles.length === 0){
+
+
+    console.log(
+      "Nenhum candle recebido"
+    );
+
+
+    return;
+
+
+  }
+
+
+
+  const sinal =
+  analisarCandles(candles);
+
+
+
+
+  if(sinal){
+
+
+
+    console.log(
+      "================================="
+    );
+
+
+    console.log(
+      "🚨 NOVO SINAL IDENTIFICADO"
+    );
+
+
+    console.log(
+      "Par:",
+      sinal.par
+    );
+
+
+    console.log(
+      "Direção:",
+      sinal.sinal
+    );
+
+
+    console.log(
+      "Preço:",
+      sinal.preco
+    );
+
+
+    console.log(
+      "Padrão:",
+      sinal.padrao
+    );
+
+
+    console.log(
+      "RSI:",
+      sinal.rsi
+    );
+
+
+    console.log(
+      "SMA10:",
+      sinal.sma10
+    );
+
+
+    console.log(
+      "SMA50:",
+      sinal.sma50
+    );
+
+
+    console.log(
+      "================================="
+    );
+
+
+
+  }else{
+
+
+
+    console.log(
+      "ℹ Nenhum sinal encontrado"
+    );
+
+
+
+  }
+
+
+
+}
+
+
+
+
+// iniciar agente
+
+iniciar();
